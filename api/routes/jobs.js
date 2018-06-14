@@ -20,17 +20,9 @@ const upload = multer({storage: storage,
 });
 
 const checkAuth = require('../middleware/check-auth');
-
 const JobsController = require('../controllers/jobs');
-
-router.get('/', JobsController.getAll);
-
-router.post('/', upload.single('companyLogo'),JobsController.createNew);
-
-router.get('/:jobId', JobsController.getById);
-
-router.patch('/:jobId', JobsController.update);
-
-router.delete('/:jobId', JobsController.delete);
+    
+router.post('/', upload.single('companyLogo'), JobsController.create);
+router.get('/:userId', JobsController.getAll);
 
 module.exports = router;

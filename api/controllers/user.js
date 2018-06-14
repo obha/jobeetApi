@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = require("../models/user");
+const User = require('../models/user');
+const Job = require('../models/job');
 
 exports.signup = (req, res, next) => {
   User.find({ email: req.body.email })
@@ -45,7 +46,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  console.log(req.body.email);
+  
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
@@ -71,9 +72,16 @@ exports.login = (req, res, next) => {
               expiresIn: "1h"
             }
           );
+    
           return res.status(200).json({
             message: "Auth successful",
-            token: token
+            token: token,
+            profile: user.map(user=>{
+              return{
+                _id:user._id,
+                email: user.email
+              }
+            })
           });
         }
         res.status(401).json({
